@@ -12,7 +12,7 @@ connectMongoDb(process.env.MONGO_URI)
 const app = express()
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "http://localhost:5173",
     methods: "POST, DELETE, GET",
     credentials: true
 }))
