@@ -12,7 +12,7 @@ connectMongoDb(process.env.MONGO_URI)
 const app = express()
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://neo-stream-six.vercel.app/",
     methods: "POST, DELETE, GET",
     credentials: true
 }))
