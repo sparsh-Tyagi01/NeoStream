@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const multer = require('multer')
 const {
   movieAddHandler,
   getMovieHandler,
@@ -10,18 +9,8 @@ const {
   getMovieById,
   countMovieHandler,
 } = require('../controllers/movies')
-const path = require('path');
+const { upload } = require('../utils/storage');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-})
-
-const upload = multer({ storage: storage })
 
 router.post('/add-movie', upload.fields([{ name: 'image' }, { name: 'video' }]), movieAddHandler)
 router.get('/get-movie', getMovieHandler)

@@ -71,9 +71,9 @@ const Navbar = () => {
                     <div className="w-[160px]">
                       <Link to={`/movies/${movie._id}`}>
                         <img
-                        src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                        src={
                           movie.image
-                        }`}
+                        }
                         alt="img"
                         className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20 rounded-md"
                       />

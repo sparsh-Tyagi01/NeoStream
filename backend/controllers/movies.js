@@ -11,8 +11,8 @@ async function movieAddHandler(req, res) {
     }
 
 
-    const image = req.files['image']?.[0]?.filename;
-    const video = req.files['video']?.[0]?.filename;
+    const image = req.files['image']?.[0]?.path;
+    const video = req.files['video']?.[0]?.path;
 
     if (!image || !video) {
       return res.status(400).json({ message: 'Both image and video are required' });
@@ -24,8 +24,8 @@ async function movieAddHandler(req, res) {
       director,
       releasedDate,
       duration,
-      image: `/uploads/${image}`,
-      video: `/uploads/${video}`,
+      image,
+      video,
     });
 
     await newMovie.save();

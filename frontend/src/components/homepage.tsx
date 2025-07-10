@@ -114,9 +114,9 @@ const Homepage = () => {
                     muted
                     loop
                     className="w-full h-full object-cover brightness-[0.6] group-hover:brightness-50 transition duration-500 rounded-xl"
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.video
-                    }`}
+                    }
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40 z-10" />
@@ -162,9 +162,9 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -208,9 +208,9 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -254,9 +254,9 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -300,9 +300,9 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -346,9 +346,9 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />

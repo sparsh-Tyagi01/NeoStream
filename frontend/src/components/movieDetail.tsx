@@ -109,7 +109,7 @@ const MovieDetail = () => {
       <p className="text-md">Duration: {movie.duration}</p>
 
       <img
-        src={`${import.meta.env.VITE_API_BASE_URL}${movie.image}`}
+        src={movie.image}
         alt={movie.name}
         className="w-64 mt-4 rounded-lg"
       />
@@ -117,7 +117,7 @@ const MovieDetail = () => {
       
       <div>
       <video
-        src={`${import.meta.env.VITE_API_BASE_URL}${movie.video}`}
+        src={movie.video}
         autoPlay
         controls
         className="w-full max-w-[800px] mt-6 shadow-md shadow-emerald-500"
@@ -145,9 +145,9 @@ const MovieDetail = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -191,9 +191,9 @@ const MovieDetail = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -237,9 +237,9 @@ const MovieDetail = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -283,9 +283,9 @@ const MovieDetail = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
@@ -329,9 +329,9 @@ const MovieDetail = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
+                    src={
                       movie.image
-                    }`}
+                    }
                     alt="img"
                     className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
                   />
