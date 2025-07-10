@@ -125,51 +125,6 @@ const MovieDetail = () => {
       </div>
       </div>
 
-      <div className="w-full bg-black">
-        <h1 id="all_movie" className="text-2xl text-white ml-3 font-medium">All Movies</h1>
-        <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="flex w-max space-x-4 p-4"
-          >
-            {data.map((movie) => (
-              <motion.figure
-                variants={itemVariants}
-                key={movie._id}
-                className="shrink-0 w-[160px]"
-              >
-                <div className="overflow-hidden rounded-md group relative">
-                  <Link to={`/movies/${movie._id}`}>
-                    <img
-                    src={`${import.meta.env.VITE_API_BASE_URL}${
-                      movie.image
-                    }`}
-                    alt="img"
-                    className="aspect-[3/4] h-fit w-fit object-cover hover:scale-110 transition-all duration-300 cursor-pointer hover:opacity-20"
-                  />
-                  </Link>
-                  <div className="absolute text-white right-0 top-0 z-50 hidden group-hover:block">
-                    <div className="w-[10vw] bg-black/70 text-wrap text-white/40 font-medium  rounded-xl border-l-3 border-red-600">
-                      <h1>
-                        This movie is directed by {movie.director} and released
-                        on {movie.releasedDate}
-                      </h1>
-                    </div>
-                  </div>
-                </div>
-                <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
-                  {movie.name}
-                </figcaption>
-              </motion.figure>
-            ))}
-          </motion.div>
-          <ScrollBar orientation="horizontal" className="h-0"/>
-        </ScrollArea>
-      </div>
-
 
       <div className="w-full bg-black">
         <h1 id="all_movie" className="text-2xl text-white ml-3 font-medium">All Movies</h1>
