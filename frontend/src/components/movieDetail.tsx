@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "@/libs/axios";
+import { axiosInstance } from "@/lib/axios";
 import { motion } from "framer-motion";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 

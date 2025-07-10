@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useRef, useState } from "react";
-import { axiosInstance } from "@/libs/axios";
+import { axiosInstance } from "@/lib/axios";
 
 type movie = {
   _id: number;

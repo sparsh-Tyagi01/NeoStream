@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/libs/axios";
+import { axiosInstance } from "@/lib/axios";
 import { motion } from "framer-motion";
 import { LogOut, Search } from "lucide-react";
 import { useEffect, useState } from "react";

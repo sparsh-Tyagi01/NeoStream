@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "@/libs/axios";
+import { axiosInstance } from "@/lib/axios";
 import {
   Carousel,
   CarouselContent,
