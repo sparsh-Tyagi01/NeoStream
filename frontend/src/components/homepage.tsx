@@ -114,7 +114,7 @@ const Homepage = () => {
                     muted
                     loop
                     className="w-full h-full object-cover brightness-[0.6] group-hover:brightness-50 transition duration-500 rounded-xl"
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.video
                     }`}
                   />
@@ -162,7 +162,7 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.image
                     }`}
                     alt="img"
@@ -208,7 +208,7 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.image
                     }`}
                     alt="img"
@@ -254,7 +254,7 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.image
                     }`}
                     alt="img"
@@ -300,7 +300,7 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.image
                     }`}
                     alt="img"
@@ -346,7 +346,7 @@ const Homepage = () => {
                 <div className="overflow-hidden rounded-md group relative">
                   <Link to={`/movies/${movie._id}`}>
                     <img
-                    src={`${import.meta.env.VITE_API_BACKEND_URL}${
+                    src={`${import.meta.env.VITE_API_BASE_URL}${
                       movie.image
                     }`}
                     alt="img"
