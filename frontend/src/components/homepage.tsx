@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
@@ -28,19 +27,6 @@ const Homepage = () => {
   return <Navigate to="/" replace />;
 }
 
-  const containerVariants = {
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-  };
 
   const [data, setData] = useState<movie[]>([]);
   const [topData, setTopData] = useState<movie[]>([]);
@@ -230,16 +216,11 @@ const Homepage = () => {
       <div className="w-full bg-black">
         <h1 id="trending" className="text-2xl text-white ml-3 font-medium">Trending</h1>
         <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+          <div
             className="flex w-max space-x-4 p-4"
           >
             {trendingData.map((movie) => (
-              <motion.figure
-                variants={itemVariants}
+              <figure
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -265,9 +246,9 @@ const Homepage = () => {
                 <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
                   {movie.name}
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
-          </motion.div>
+          </div>
           <ScrollBar orientation="horizontal" className="h-0"/>
         </ScrollArea>
       </div>
@@ -276,16 +257,11 @@ const Homepage = () => {
       <div className="w-full bg-black">
         <h1 id="new_movie" className="text-2xl text-white ml-3 font-medium">New on NeoStream</h1>
         <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+          <div
             className="flex w-max space-x-4 p-4"
           >
             {newData.map((movie) => (
-              <motion.figure
-                variants={itemVariants}
+              <figure
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -311,9 +287,9 @@ const Homepage = () => {
                 <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
                   {movie.name}
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
-          </motion.div>
+          </div>
           <ScrollBar orientation="horizontal" className="h-0"/>
         </ScrollArea>
       </div>
@@ -322,16 +298,11 @@ const Homepage = () => {
       <div className="w-full bg-black">
         <h1 id="watch_again" className="text-2xl text-white ml-3 font-medium">Watch it again</h1>
         <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+          <div
             className="flex w-max space-x-4 p-4"
           >
             {againData.map((movie) => (
-              <motion.figure
-                variants={itemVariants}
+              <figure
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -357,9 +328,9 @@ const Homepage = () => {
                 <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
                   {movie.name}
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
-          </motion.div>
+          </div>
           <ScrollBar orientation="horizontal" className="h-0"/>
         </ScrollArea>
       </div>
