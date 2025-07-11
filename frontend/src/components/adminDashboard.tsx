@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 
 type movie = {
-  _id: number;
+  _id: string;
   name: string;
   director: string;
   releasedDate: string;
@@ -37,7 +37,8 @@ type movie = {
 
 const AdminDashboard = () => {
   const token = localStorage.getItem("token");
-  if (!token) {
+  const adminEmail = localStorage.getItem("adminEmail");
+  if (!token || !adminEmail) {
   return <Navigate to="/" replace />;
 }
   
@@ -117,7 +118,7 @@ const AdminDashboard = () => {
     getMovie()
   },[])
 
-  async function deleteMovie(id:number) {
+  async function deleteMovie(id:string) {
     try {
     const res = await axiosInstance.delete(`/movies/delete-movie/${id}`);
     if (res.status === 204) {
@@ -346,7 +347,7 @@ const AdminDashboard = () => {
             <TableBody>
               {data.map((movie)=>(
                 <TableRow key={movie._id}>
-                <TableCell className="font-medium flex items-center"><img src={`${import.meta.env.VITE_API_BASE_URL}${movie.image}`} alt="img" className="w-[30px] mr-1 rounded-[2px]"/>{movie.name}</TableCell>
+                <TableCell className="font-medium flex items-center"><img src={movie.image} alt="img" className="w-[30px] mr-1 rounded-[2px]"/>{movie.name}</TableCell>
                 <TableCell>{movie.director}</TableCell>
                 <TableCell>{movie.releasedDate}</TableCell>
                 <TableCell onClick={()=> deleteMovie(movie._id)} className="flex justify-end text-red-700 cursor-pointer"><Trash/></TableCell>

@@ -31,7 +31,7 @@ const Login = () => {
         if(res.data.email==import.meta.env.VITE_API_ADMIN_EMAIL){
           localStorage.setItem("adminEmail", res.data.email)
         }
-        if(res.status){
+        if(res.status==201 && res.data.token){
           navigate("/home")
         }
       }      
@@ -86,7 +86,7 @@ const Login = () => {
                 )}
                 
                 <button type="submit" className="cursor-pointer bg-red-600 py-2 md:py-1 px-5 text-white rounded-[5px] font-medium w-[62vw] md:w-[22vw] mt-5">
-                  {data ? "Get Started" : "Genrate OTP"}
+                  {data ? "Get Started" : "Generate OTP"}
                 </button>
               </form>
             </div>

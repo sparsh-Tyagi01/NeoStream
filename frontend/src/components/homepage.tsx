@@ -49,59 +49,23 @@ const Homepage = () => {
   const [againData, setAgainData] = useState<movie[]>([]);
   const [broadcastData, setBroadcastData] = useState<movie[]>([]);
 
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-movie");
-      setData(res.data);
-    }
+ useEffect(() => {
+  async function getMovies() {
+    const [all, top, broadcast] = await Promise.all([
+      axiosInstance.get("/movies/get-movie"),
+      axiosInstance.get("/movies/get-top-movie"),
+      axiosInstance.get("/movies/get-broadcast-movie"),
+    ]);
+    setData(all.data);
+    setTopData(top.data);
+    setBroadcastData(broadcast.data);
+    setTrendingData(top.data);
+    setNewData(top.data);
+    setAgainData(top.data);
+  }
 
-    getMovie();
-  }, []);
-
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-top-movie");
-      setTopData(res.data);
-    }
-
-    getMovie();
-  }, []);
-
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-top-movie");
-      setTrendingData(res.data);
-    }
-
-    getMovie();
-  }, []);
-
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-top-movie");
-      setNewData(res.data);
-    }
-
-    getMovie();
-  }, []);
-
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-top-movie");
-      setAgainData(res.data);
-    }
-
-    getMovie();
-  }, []);
-
-  useEffect(() => {
-    async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-broadcast-movie");
-      setBroadcastData(res.data);
-    }
-
-    getMovie();
-  }, []);
+  getMovies();
+}, []);
 
   return (
     <>
