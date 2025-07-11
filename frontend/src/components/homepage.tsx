@@ -24,7 +24,9 @@ type movie = {
 
 const Homepage = () => {
   const token = localStorage.getItem("token");
-  if (!token) Navigate({ to: "/" });
+  if (!token) {
+  return <Navigate to="/" replace />;
+}
 
   const containerVariants = {
     hidden: {},

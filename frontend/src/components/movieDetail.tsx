@@ -17,7 +17,9 @@ type Movie = {
 
 const MovieDetail = () => {
   const token = localStorage.getItem("token");
-  if (!token) Navigate({ to: "/" });
+  if (!token) {
+  return <Navigate to="/" replace />;
+}
   
   const { id } = useParams();
 

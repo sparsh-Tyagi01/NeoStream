@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { DiameterIcon, List, Trash, Upload, User } from "lucide-react";
+import { List, Trash, Upload, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,7 +37,9 @@ type movie = {
 
 const AdminDashboard = () => {
   const token = localStorage.getItem("token");
-  if (!token) Navigate({ to: "/" });
+  if (!token) {
+  return <Navigate to="/" replace />;
+}
   
   const [files, setFiles] = useState<{
     video: File | null;
@@ -108,7 +110,7 @@ const AdminDashboard = () => {
 
   useEffect(()=>{
     async function getMovie() {
-      const res = await axiosInstance.delete('/movies/get-movie')
+      const res = await axiosInstance.get('/movies/get-movie')
       setData(res.data)
     }
 
@@ -344,7 +346,7 @@ const AdminDashboard = () => {
             <TableBody>
               {data.map((movie)=>(
                 <TableRow key={movie._id}>
-                <TableCell className="font-medium flex items-center"><img src={`${import.meta.env.VITE_API_BACKEND_URL}${movie.image}`} alt="img" className="w-[30px] mr-1 rounded-[2px]"/>{movie.name}</TableCell>
+                <TableCell className="font-medium flex items-center"><img src={`${import.meta.env.VITE_API_BASE_URL}${movie.image}`} alt="img" className="w-[30px] mr-1 rounded-[2px]"/>{movie.name}</TableCell>
                 <TableCell>{movie.director}</TableCell>
                 <TableCell>{movie.releasedDate}</TableCell>
                 <TableCell onClick={()=> deleteMovie(movie._id)} className="flex justify-end text-red-700 cursor-pointer"><Trash/></TableCell>
