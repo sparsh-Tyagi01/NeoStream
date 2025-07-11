@@ -140,7 +140,7 @@ const MovieDetail = () => {
           >
             {data.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -186,7 +186,7 @@ const MovieDetail = () => {
           >
             {topData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -232,7 +232,7 @@ const MovieDetail = () => {
           >
             {trendingData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -278,7 +278,7 @@ const MovieDetail = () => {
           >
             {newData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -324,7 +324,7 @@ const MovieDetail = () => {
           >
             {againData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
