@@ -45,7 +45,7 @@ const MovieDetail = () => {
 
     useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-movie");
+      const res = await axiosInstance.get("/movies/get-movie");
       setData(res.data);
     }
 
@@ -54,7 +54,7 @@ const MovieDetail = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-top-movie");
+      const res = await axiosInstance.get("/movies/get-top-movie");
       setTopData(res.data);
     }
 
@@ -63,7 +63,7 @@ const MovieDetail = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-top-movie");
+      const res = await axiosInstance.get("/movies/get-top-movie");
       setTrendingData(res.data);
     }
 
@@ -72,7 +72,7 @@ const MovieDetail = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-top-movie");
+      const res = await axiosInstance.get("/movies/get-top-movie");
       setNewData(res.data);
     }
 
@@ -81,7 +81,7 @@ const MovieDetail = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-top-movie");
+      const res = await axiosInstance.get("/movies/get-top-movie");
       setAgainData(res.data);
     }
 

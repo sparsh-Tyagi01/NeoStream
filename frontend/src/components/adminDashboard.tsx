@@ -108,7 +108,7 @@ const AdminDashboard = () => {
 
   useEffect(()=>{
     async function getMovie() {
-      const res = await axiosInstance('/movies/get-movie')
+      const res = await axiosInstance.delete('/movies/get-movie')
       setData(res.data)
     }
 
