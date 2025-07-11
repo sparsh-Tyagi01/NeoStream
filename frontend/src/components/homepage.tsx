@@ -189,16 +189,11 @@ const Homepage = () => {
       <div className="w-full bg-black">
         <h1 id="top_pick" className="text-2xl text-white ml-3 font-medium">Top Pick</h1>
         <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+          <div
             className="flex w-max space-x-4 p-4"
           >
             {topData.map((movie) => (
-              <motion.figure
-                variants={itemVariants}
+              <figure
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -224,9 +219,9 @@ const Homepage = () => {
                 <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
                   {movie.name}
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
-          </motion.div>
+          </div>
           <ScrollBar orientation="horizontal" className="h-0"/>
         </ScrollArea>
       </div>
