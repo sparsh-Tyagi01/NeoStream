@@ -105,7 +105,7 @@ const Homepage = () => {
 
   return (
     <>
-      <div className="h-[50vh] md:h-[70vh] bg-gradient-to-l from-black via-red-950 to-black flex justify-center items-center overflow-x-hidden">
+      <div className="h-[50vh] md:h-[70vh] bg-black flex justify-center items-center overflow-x-hidden">
         <Carousel>
           <CarouselContent>
             {broadcastData.map((movie) => (
@@ -148,16 +148,11 @@ const Homepage = () => {
       <div className="w-full bg-black">
         <h1 id="all_movie" className="text-2xl text-white ml-3 font-medium">All Movies</h1>
         <ScrollArea className="w-full rounded-md whitespace-nowrap">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
+          <div
             className="flex w-max space-x-4 p-4"
           >
             {data.map((movie) => (
-              <motion.figure
-                variants={{itemVariants}}
+              <figure
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -183,9 +178,9 @@ const Homepage = () => {
                 <figcaption className="text-muted-foreground pt-2 text-xl text-wrap">
                   {movie.name}
                 </figcaption>
-              </motion.figure>
+              </figure>
             ))}
-          </motion.div>
+          </div>
           <ScrollBar orientation="horizontal" className="h-0"/>
         </ScrollArea>
       </div>
@@ -203,7 +198,7 @@ const Homepage = () => {
           >
             {topData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -249,7 +244,7 @@ const Homepage = () => {
           >
             {trendingData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -295,7 +290,7 @@ const Homepage = () => {
           >
             {newData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
@@ -341,7 +336,7 @@ const Homepage = () => {
           >
             {againData.map((movie) => (
               <motion.figure
-                variants={{itemVariants}}
+                variants={itemVariants}
                 key={movie._id}
                 className="shrink-0 w-[160px]"
               >
