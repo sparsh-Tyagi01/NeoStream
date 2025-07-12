@@ -51,7 +51,7 @@ const Navbar = () => {
           {/* Movies Dropdown */}
           <li className="relative group cursor-default">
             Movies
-            <ul className="absolute top-full left-0 bg-black/80 shadow-lg rounded-md p-4 w-[80vw] sm:w-[60vw] hidden group-hover:flex flex-col z-50">
+            <ul className="absolute top-full left-0 bg-black/80 shadow-lg rounded-md p-4 w-[80vw] sm:w-[40vw] hidden group-hover:flex flex-col z-50">
               <div className="flex flex-wrap gap-2">
                 {[
                   ["#all_movie", "All Movies"],
