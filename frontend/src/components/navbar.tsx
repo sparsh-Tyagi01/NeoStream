@@ -20,6 +20,9 @@ const Navbar = () => {
   const [isSearch, setSearch] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [broadcastData, setBroadcastData] = useState<movie[]>([]);
+  const [allMovie, setAllMovie] = useState<movie[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredMovies, setFilteredMovies] = useState<movie[]>([]);
 
   useEffect(() => {
     async function getMovie() {
@@ -27,11 +30,16 @@ const Navbar = () => {
       setBroadcastData(res.data);
     }
     getMovie();
+
+    async function allMovie() {
+      const res = await axiosInstance("/movies/get-movie");
+      setAllMovie(res.data);
+    }
+    allMovie();
   }, []);
 
   return (
     <div className="bg-black text-white px-4 py-2">
-      {/* Top bar */}
       <div className="flex items-center justify-between">
         <motion.h1
           initial={{ opacity: 0 }}
@@ -42,13 +50,11 @@ const Navbar = () => {
           NEOSTREAM
         </motion.h1>
 
-        {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center gap-5 font-medium ml-8">
           <li className="cursor-pointer" onClick={() => navigate("/home")}>
             Home
           </li>
 
-          {/* Movies Dropdown */}
           <li className="relative group cursor-default">
             Movies
             <ul className="absolute top-full left-0 bg-black/80 shadow-lg rounded-md p-4 w-[80vw] sm:w-[40vw] hidden group-hover:flex flex-col z-50">
@@ -85,7 +91,6 @@ const Navbar = () => {
             </ul>
           </li>
 
-          {/* Series Placeholder */}
           <li className="relative group cursor-default">
             Series
             <ul className="absolute top-full left-0 bg-black/80 shadow-lg rounded-md p-3 w-fit hidden group-hover:block z-50">
@@ -96,9 +101,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Right Controls */}
         <div className="flex items-center gap-4">
-          {/* Admin Button */}
           {admin && (
             <button
               onClick={() => navigate("/admin")}
@@ -108,7 +111,6 @@ const Navbar = () => {
             </button>
           )}
 
-          {/* Search Icon */}
           <div className="relative">
             <Search
               size={24}
@@ -119,12 +121,38 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="absolute top-10 right-0 text-sm px-2 py-1 bg-gray-800 rounded-md focus:outline-none w-[150px]"
+                value={searchQuery}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearchQuery(value);
+                  const filtered = allMovie.filter((movie) =>
+                    movie.name.toLowerCase().includes(value.toLowerCase())
+                  );
+                  setFilteredMovies(filtered);
+                }}
+                className="focus:outline-none pl-3 text-white absolute -left-20 h-[5vh] top-10 bg-gray-900/50 border-1 border-gray-700 rounded-md w-[200px]"
               />
+            )}
+            {searchQuery && filteredMovies.length > 0 && (
+              <div className="absolute top-[60px] left-0 bg-black/80 text-white rounded-md z-50 w-[200px] max-h-[300px] overflow-y-auto shadow-lg">
+                {filteredMovies.map((movie) => (
+                  <Link
+                    key={movie._id}
+                    to={`/movies/${movie._id}`}
+                    onClick={() => {
+                      setSearch(false);
+                      setSearchQuery("");
+                      setFilteredMovies([]);
+                    }}
+                    className="block px-3 py-2 hover:bg-gray-800 cursor-pointer"
+                  >
+                    {movie.name}
+                  </Link>
+                ))}
+              </div>
             )}
           </div>
 
-          {/* Logout */}
           <button
             onClick={() => navigate("/login")}
             className="hidden sm:flex items-center gap-1 bg-gradient-to-r from-red-600 via-pink-500 px-3 py-1 rounded-md hover:scale-105 transition"
@@ -132,7 +160,6 @@ const Navbar = () => {
             Logout <LogOut size={20} />
           </button>
 
-          {/* Hamburger */}
           <div
             className="lg:hidden cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -142,7 +169,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="lg:hidden mt-4 space-y-3 text-base">
           <div onClick={() => navigate("/home")} className="cursor-pointer">
