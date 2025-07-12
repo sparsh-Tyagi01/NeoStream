@@ -39,9 +39,9 @@ const AdminDashboard = () => {
   const token = localStorage.getItem("token");
   const adminEmail = localStorage.getItem("adminEmail");
   if (!token || !adminEmail) {
-  return <Navigate to="/" replace />;
-}
-  
+    return <Navigate to="/" replace />;
+  }
+
   const [files, setFiles] = useState<{
     video: File | null;
     image: File | null;
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
     video: null,
     image: null,
   });
-  const [isLoading , setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     director: "",
@@ -57,9 +57,9 @@ const AdminDashboard = () => {
     duration: "",
   });
 
-  const [data, setData] = useState<movie[]>([])
-  const [userCount, setUserCount] = useState("")
-  const [movieCount, setMovieCount] = useState("")
+  const [data, setData] = useState<movie[]>([]);
+  const [userCount, setUserCount] = useState("");
+  const [movieCount, setMovieCount] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
     form.append("video", files.video);
 
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await axiosInstance.post("/movies/add-movie", form, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -104,82 +104,78 @@ const AdminDashboard = () => {
     } catch (err) {
       console.error(err);
       alert("Already uploaded");
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance.get('/movies/get-movie')
-      setData(res.data)
+      const res = await axiosInstance.get("/movies/get-movie");
+      setData(res.data);
     }
 
-    getMovie()
-  },[])
+    getMovie();
+  }, []);
 
-  async function deleteMovie(id:string) {
+  async function deleteMovie(id: string) {
     try {
-    const res = await axiosInstance.delete(`/movies/delete-movie/${id}`);
-    if (res.status === 204) {
-      alert("Movie deleted");
+      const res = await axiosInstance.delete(`/movies/delete-movie/${id}`);
+      if (res.status === 204) {
+        alert("Movie deleted");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete movie");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Failed to delete movie");
-  }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     async function handleUser() {
-      const res = await axiosInstance.get('/auth/count-user')
-      setUserCount(res.data)
+      const res = await axiosInstance.get("/auth/count-user");
+      setUserCount(res.data);
 
-      const result = await axiosInstance.get('/movies/count-movie')
-      setMovieCount(result.data)
+      const result = await axiosInstance.get("/movies/count-movie");
+      setMovieCount(result.data);
     }
 
-    handleUser();    
-  },[])
+    handleUser();
+  }, []);
 
   return (
     <>
-      <div className="w-screen bg-black">
-        <div className="flex flex-col sm:flex-row justify-between items-center px-6 gap-4 sm:gap-0">
-          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-red-600 via-pink-500 to-red-700 text-transparent bg-clip-text drop-shadow-[0_0_2px_rgba(255,0,0,0.8)] tracking-wider animate-pulse cursor-default">
+      <div className="w-full bg-black min-h-screen pb-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 gap-4 pt-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-pink-500 to-red-700 text-transparent bg-clip-text drop-shadow-[0_0_2px_rgba(255,0,0,0.8)] tracking-wider animate-pulse">
             NEOSTREAM
           </h1>
-          <h1 className="text-white bg-red-700 py-1 px-2 rounded-[5px] cursor-default">
+          <h1 className="text-white bg-red-700 py-1 px-2 rounded-md text-sm sm:text-base">
             Admin
           </h1>
         </div>
-        <div className="flex justify-around items-center w-screen mt-4">
-          <div className="w-70 h-70 bg-gray-800/40 rounded-[8px] shadow-green-400 shadow-md flex justify-center items-center">
-            <div className="text-white">
-              <List size={60} />
-            </div>
-            <div className="flex flex-col items-center">
-              <h2 className="text-white">Total movies</h2>
-              <h1 className="text-white/60 text-4xl font-bold">{movieCount}</h1>
+        <div className="flex flex-wrap justify-center gap-6 mt-6 px-4">
+          <div className="w-full sm:w-[300px] h-40 bg-gray-800/40 rounded-[8px] shadow-green-400 shadow-md flex justify-around items-center p-4">
+            <List size={50} className="text-white" />
+            <div className="text-center">
+              <h2 className="text-white text-base">Total movies</h2>
+              <h1 className="text-white/60 text-3xl font-bold">{movieCount}</h1>
             </div>
           </div>
-          <div className="w-70 h-70 bg-gray-800/40 rounded-[8px] shadow-green-400 shadow-md flex justify-center items-center">
-            <div className="text-white">
-              <User size={60} />
-            </div>
-            <div className="flex flex-col items-center">
-              <h2 className="text-white">Total users</h2>
-              <h1 className="text-white/60 text-4xl font-bold">{userCount}</h1>
+          <div className="w-full sm:w-[300px] h-40 bg-gray-800/40 rounded-[8px] shadow-green-400 shadow-md flex justify-around items-center p-4">
+            <User size={50} className="text-white" />
+            <div className="text-center">
+              <h2 className="text-white text-base">Total users</h2>
+              <h1 className="text-white/60 text-3xl font-bold">{userCount}</h1>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-between mt-8 mx-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-10 px-4 sm:px-10 gap-4">
           <div>
-            <h1 className="text-white font-medium text-xm">
+            <h1 className="text-white font-semibold text-lg">
               🎬 Movies Library
             </h1>
-            <h5 className="text-white/60 text-xs">Manage your movie tracks</h5>
+            <p className="text-white/60 text-sm">Manage your movie tracks</p>
           </div>
           <div>
             <Dialog>
@@ -325,7 +321,7 @@ const AdminDashboard = () => {
                       <Button variant="outline">Cancel</Button>
                     </DialogClose>
                     <Button onClick={handleSubmit} className="cursor-pointer">
-                      {isLoading ? "Uploading ":"Add Movie"}
+                      {isLoading ? "Uploading " : "Add Movie"}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -333,28 +329,42 @@ const AdminDashboard = () => {
             </Dialog>
           </div>
         </div>
-        <div className="text-white mt-8 mx-10">
-          <Table>
-            <TableCaption>A list of your movies & series</TableCaption>
-            <TableHeader>
-              <TableRow className="bg-gray-700">
-                <TableHead>Title</TableHead>
-                <TableHead>Director</TableHead>
-                <TableHead>Released Date</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((movie)=>(
-                <TableRow key={movie._id}>
-                <TableCell className="font-medium flex items-center"><img src={movie.image} alt="img" className="w-[30px] mr-1 rounded-[2px]"/>{movie.name}</TableCell>
-                <TableCell>{movie.director}</TableCell>
-                <TableCell>{movie.releasedDate}</TableCell>
-                <TableCell onClick={()=> deleteMovie(movie._id)} className="flex justify-end text-red-700 cursor-pointer"><Trash/></TableCell>
-              </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className="text-white mt-6 px-4 sm:px-10 overflow-x-auto">
+          <div className="min-w-[600px]">
+            <Table>
+              <TableCaption>A list of your movies & series</TableCaption>
+              <TableHeader>
+                <TableRow className="bg-gray-700">
+                  <TableHead>Title</TableHead>
+                  <TableHead>Director</TableHead>
+                  <TableHead>Released Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((movie) => (
+                  <TableRow key={movie._id}>
+                    <TableCell className="font-medium flex items-center">
+                      <img
+                        src={movie.image}
+                        alt="img"
+                        className="w-[30px] mr-1 rounded-[2px]"
+                      />
+                      {movie.name}
+                    </TableCell>
+                    <TableCell>{movie.director}</TableCell>
+                    <TableCell>{movie.releasedDate}</TableCell>
+                    <TableCell
+                      onClick={() => deleteMovie(movie._id)}
+                      className="flex justify-end text-red-700 cursor-pointer"
+                    >
+                      <Trash />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </>
