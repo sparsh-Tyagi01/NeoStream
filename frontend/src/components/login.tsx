@@ -17,12 +17,13 @@ const Login = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
+      setGenerate(true);
+
       if (!data) {
         const res = await axiosInstance.post("/auth/send-otp", {
           email: email,
         });
         setData(res.data);
-        setGenerate(true);
       } else {
         const res = await axiosInstance.post("/auth/verify-otp", {
           email: email,
@@ -36,8 +37,13 @@ const Login = () => {
           navigate("/home");
         }
       }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Something went wrong. Try again.");
     } finally {
-      setGenerate(false);
+      if (!data) {
+        setGenerate(false);
+      }
     }
   }
 
