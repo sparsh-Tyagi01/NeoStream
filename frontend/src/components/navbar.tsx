@@ -26,13 +26,13 @@ const Navbar = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance("/movies/get-broadcast-movie");
+      const res = await axiosInstance.get("/movies/get-broadcast-movie");
       setBroadcastData(res.data);
     }
     getMovie();
 
     async function allMovie() {
-      const res = await axiosInstance("/movies/get-movie");
+      const res = await axiosInstance.get("/movies/get-movie");
       setAllMovie(res.data);
     }
     allMovie();
