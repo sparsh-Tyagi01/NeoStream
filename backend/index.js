@@ -10,6 +10,7 @@ const path = require('path')
 dotenv.config();
 connectMongoDb(process.env.MONGO_URI)
 const app = express()
+app.use("trust proxy" , 1);
 
 app.use(cors({
     origin: "https://neo-stream-six.vercel.app",
