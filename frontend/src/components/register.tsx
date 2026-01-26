@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
 import React, { useEffect, useState } from "react";
 
-const Login = () => {
+const Register = () => {
   useEffect(() => {
     localStorage.clear();
   }, []);
 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [data, setData] = useState("");
   const [otp, setOtp] = useState("");
   const [isGenerate, setGenerate] = useState(false);
@@ -22,6 +23,7 @@ const Login = () => {
       if (!data) {
         const res = await axiosInstance.post("/auth/send-otp", {
           email: email,
+          username: username
         });
         setData(res.data);
       } else {
@@ -83,9 +85,17 @@ const Login = () => {
           <div className="flex justify-center items-center w-full h-[90vh]">
             <div className="flex flex-col items-center w-[70vw] md:w-[30vw] h-[35vh] sm:h-[40vh] md:h-[50vh] bg-black/80 rounded-xl">
               <h1 className="text-white font-bold text-[15px] sm:text-xl md:text-2xl mb-5 mt-5">
-                SignIn
+                SignUp
               </h1>
               <form onSubmit={handleSubmit}>
+                <input
+                 type="text"
+                 required
+                 value={username}
+                 onChange={(e)=> setUsername(e.target.value)}
+                 placeholder="Enter your usename"
+                 className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
+                />
                 <input
                   type="email"
                   required
@@ -110,6 +120,7 @@ const Login = () => {
                   <button
                     type="submit"
                     className="cursor-pointer bg-red-600 py-2 md:py-1 px-5 text-white rounded-[5px] font-medium w-[62vw] md:w-[22vw] mt-5"
+                    disabled
                   >
                     Generating...
                   </button>
@@ -122,7 +133,7 @@ const Login = () => {
                   </button>
                 )}
 
-               <p className="text-center text-white text-sm pt-4 cursor-default">Don't have an account? <span className="text-blue-600 cursor-pointer" onClick={()=> navigate("/register")}>SignUp</span></p>
+                <p className="text-center text-white text-sm pt-4 cursor-default">Already have an account? <span className="text-blue-600 cursor-pointer" onClick={()=> navigate("/login")}>SignIn</span></p>
               </form>
             </div>
           </div>
@@ -132,4 +143,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
