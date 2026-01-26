@@ -121,8 +121,14 @@ const AdminDashboard = () => {
   async function deleteMovie(id: string) {
     try {
       const res = await axiosInstance.delete(`/movies/delete-movie/${id}`);
-      if (res.status === 204) {
-        alert("Movie deleted");
+      if (res.status === 200) {
+        alert("Movie deleted successfully");
+
+        const updatedMovies = await axiosInstance.get("/movies/get-movie");
+        setData(updatedMovies.data);
+
+        const result = await axiosInstance.get("/movies/count-movie");
+        setMovieCount(result.data);
       }
     } catch (err) {
       console.error(err);
