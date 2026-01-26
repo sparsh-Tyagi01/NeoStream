@@ -3,7 +3,6 @@ const {connectMongoDb} = require('./connections/connect')
 const dotenv = require('dotenv');
 const userRoute = require('./routes/user')
 const movieRoute = require('./routes/movies')
-const bodyparser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
 
@@ -17,7 +16,7 @@ app.use(cors({
     credentials: true
 }))
 
-app.use(bodyparser.json())
+app.use(express.json())
 app.use('/api/auth', userRoute)
 app.use('/api/movies', movieRoute)
 
