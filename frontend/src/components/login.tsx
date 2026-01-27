@@ -10,40 +10,31 @@ const Login = () => {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [data, setData] = useState("");
-  const [otp, setOtp] = useState("");
   const [isGenerate, setGenerate] = useState(false);
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
       setGenerate(true);
-
-      if (!data) {
-        const res = await axiosInstance.post("/auth/send-otp", {
-          email: email,
-        });
-        setData(res.data);
-      } else {
-        const res = await axiosInstance.post("/auth/verify-otp", {
-          email: email,
-          otp: otp,
-        });
-        localStorage.setItem("token", res.data.token);
-        if (res.data.email == import.meta.env.VITE_API_ADMIN_EMAIL) {
-          localStorage.setItem("adminEmail", res.data.email);
-        }
-        if (res.status == 201 && res.data.token) {
-          navigate("/home");
-        }
+      const res = await axiosInstance.post("/auth/login", {
+        email: email,
+        password: password
+      });
+      localStorage.setItem("token", res.data.token);
+      if (res.data.email == import.meta.env.VITE_API_ADMIN_EMAIL) {
+        localStorage.setItem("adminEmail", res.data.email);
       }
+      localStorage.setItem("username", res.data.username)
+      if (res.status == 201 && res.data.token) {
+        navigate("/home");
+      }
+      
     } catch (error) {
       console.error("Login Error:", error);
       alert("Something went wrong. Try again.");
     } finally {
-      if (!data) {
         setGenerate(false);
-      }
     }
   }
 
@@ -92,33 +83,32 @@ const Login = () => {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="Enter your email or username"
                   className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                 />
-                {data && (
-                  <input
-                    type="text"
-                    name="otp"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
-                  />
-                )}
-
+                <input
+                  type="password"
+                  required
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
+                />                
                 {isGenerate ? (
                   <button
                     type="submit"
                     className="cursor-pointer bg-red-600 py-2 md:py-1 px-5 text-white rounded-[5px] font-medium w-[62vw] md:w-[22vw] mt-5"
+                    disabled
                   >
-                    Generating...
+                    login...
                   </button>
                 ) : (
                   <button
                     type="submit"
                     className="cursor-pointer bg-red-600 py-2 md:py-1 px-5 text-white rounded-[5px] font-medium w-[62vw] md:w-[22vw] mt-5"
                   >
-                    {data ? "Get Started" : "Generate OTP"}
+                    Get Started
                   </button>
                 )}
 

@@ -11,6 +11,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [data, setData] = useState("");
   const [otp, setOtp] = useState("");
   const [isGenerate, setGenerate] = useState(false);
@@ -23,7 +24,8 @@ const Register = () => {
       if (!data) {
         const res = await axiosInstance.post("/auth/send-otp", {
           email: email,
-          username: username
+          username: username,
+          password: password
         });
         setData(res.data);
       } else {
@@ -40,7 +42,7 @@ const Register = () => {
         }
       }
     } catch (error) {
-      console.error("Login Error:", error);
+      console.error("Register Error:", error);
       alert("Something went wrong. Try again.");
     } finally {
       if (!data) {
@@ -91,9 +93,19 @@ const Register = () => {
                 <input
                  type="text"
                  required
+                 name="username"
                  value={username}
                  onChange={(e)=> setUsername(e.target.value)}
-                 placeholder="Enter your usename"
+                 placeholder="Enter your username"
+                 className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
+                />
+                 <input
+                 type="password"
+                 name="password"
+                 required
+                 value={password}
+                 onChange={(e)=> setPassword(e.target.value)}
+                 placeholder="Create your password"
                  className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                 />
                 <input

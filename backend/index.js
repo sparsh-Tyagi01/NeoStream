@@ -12,7 +12,7 @@ const app = express()
 
 app.use(cors({
     origin: process.env.BASE_URL,
-    methods: "POST, DELETE, GET",
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true
 }))
 
