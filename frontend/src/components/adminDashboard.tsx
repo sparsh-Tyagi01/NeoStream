@@ -37,8 +37,8 @@ type movie = {
 
 const AdminDashboard = () => {
   const token = localStorage.getItem("token");
-  const adminEmail = localStorage.getItem("adminEmail");
-  if (!token || !adminEmail) {
+  const isAdmin = localStorage.getItem("isAdmin");
+  if (!token || !isAdmin) {
     return <Navigate to="/" replace />;
   }
 

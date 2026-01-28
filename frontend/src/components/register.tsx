@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
 import React, { useEffect, useState } from "react";
+import { toast, Toaster } from 'react-hot-toast'
 
 const Register = () => {
   useEffect(() => {
@@ -25,25 +26,26 @@ const Register = () => {
         const res = await axiosInstance.post("/auth/send-otp", {
           email: email,
           username: username,
-          password: password
         });
         setData(res.data);
       } else {
         const res = await axiosInstance.post("/auth/verify-otp", {
           email: email,
           otp: otp,
+          password: password
         });
         localStorage.setItem("token", res.data.token);
-        if (res.data.email == import.meta.env.VITE_API_ADMIN_EMAIL) {
-          localStorage.setItem("adminEmail", res.data.email);
+        if (res.data.role === "admin") {
+          localStorage.setItem("isAdmin", "true");
         }
+        localStorage.setItem("username", res.data.username)
         if (res.status == 201 && res.data.token) {
           navigate("/home");
         }
       }
     } catch (error) {
       console.error("Register Error:", error);
-      alert("Something went wrong. Try again.");
+      toast.error("Registeration failed")
     } finally {
       if (!data) {
         setGenerate(false);
@@ -53,6 +55,7 @@ const Register = () => {
 
   return (
     <>
+    <Toaster/>
       <div className="w-full h-screen relative overflow-hidden">
         <motion.img
           src="neo-poster.jpg"
@@ -99,15 +102,6 @@ const Register = () => {
                  placeholder="Enter your username"
                  className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                 />
-                 <input
-                 type="password"
-                 name="password"
-                 required
-                 value={password}
-                 onChange={(e)=> setPassword(e.target.value)}
-                 placeholder="Create your password"
-                 className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
-                />
                 <input
                   type="email"
                   required
@@ -118,6 +112,7 @@ const Register = () => {
                   className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                 />
                 {data && (
+                  <>
                   <input
                     type="text"
                     name="otp"
@@ -126,6 +121,17 @@ const Register = () => {
                     onChange={(e) => setOtp(e.target.value)}
                     className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                   />
+                  <input
+                 type="password"
+                 name="password"
+                 required
+                 value={password}
+                 onChange={(e)=> setPassword(e.target.value)}
+                 placeholder="Create your password"
+                 className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
+                />
+                  </>
+                  
                 )}
 
                 {isGenerate ? (

@@ -16,4 +16,11 @@ function verifyToken(req,res,next) {
     }
 }
 
-module.exports = {verifyToken}
+function adminOnly(req,res) {
+    if(!req.user || req.user.role != "admin"){
+        return res.status(400).json({message: "Admin access required"})
+    }
+    next()
+}
+
+module.exports = {verifyToken, adminOnly}

@@ -1,6 +1,5 @@
 const dotenv = require('dotenv')
 const User = require('../models/user')
-const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken');
 const transporter = require('../utils/mailer');
 const bcrypt = require("bcrypt")
@@ -11,7 +10,7 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 
 async function otpGenerateHandler(req, res) {
   try {
-    const { username, password, email } = req.body;
+    const { username, email } = req.body;
     const otp = generateOTP();
     const otpExpires = new Date(Date.now() + 300 * 1000);
 
@@ -24,13 +23,9 @@ async function otpGenerateHandler(req, res) {
     if (existingEmail) {
       return res.status(404).json({"message": "email already registered"})
     }
-
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
     
-    const user = await User.create({
+    await User.create({
       username,
-      password: hashedPassword,
       email,
       otp,
       otpExpires
@@ -52,24 +47,30 @@ async function otpGenerateHandler(req, res) {
 
 async function otpVerifyHandler(req, res) {
   try {
-    const {otp, email}= req.body
+    const {otp, email, password}= req.body
     const user = await User.findOne({email})
 
     if(!user || user.otp!=otp || user.otpExpires < new Date()){
-        return res.status(400).json({ message: 'Invalid or expired OTP' })
+      await User.deleteOne({email})
+      return res.status(400).json({ message: 'Invalid or expired OTP' })
     }
 
-  
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    user.password = hashedPassword;
     user.otp = null;
     user.otpExpires = null;
     await user.save();
 
-    const token = jwt.sign({ email, username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
-    res.status(201).json({ 
-      "token": token,
-      "email": email,
-      "username": user.username
-    });
+  const payload = {
+    username: user.username,
+    email: email,
+    role: email === process.env.ADMIN_EMAIL ? "admin" : "user",
+  }
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.status(201).json({"token": token, ...payload});
   } catch (error) {
     console.error('OTP Verify Error:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
@@ -95,12 +96,14 @@ async function userLogin(req,res) {
     return res.status(400).json({"message": "incorrect password"})
   }
 
-  const token = jwt.sign({ email, username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
-  res.status(201).json({ 
-    "token": token,
-    "email": email,
-    "username": user.username
-   });
+  const payload = {
+    username: user.username,
+    email: email,
+    role: email === process.env.ADMIN_EMAIL ? "admin" : "user",
+  }
+
+  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
+  res.status(201).json({"token": token, ...payload});
 }
 
 module.exports = {otpGenerateHandler, otpVerifyHandler, countUserHandler, userLogin}

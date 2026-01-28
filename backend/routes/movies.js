@@ -10,10 +10,10 @@ const {
   countMovieHandler,
 } = require('../controllers/movies')
 const { upload } = require('../utils/storage');
-const {verifyToken} = require("../middlewares/auth")
+const {verifyToken, adminOnly} = require("../middlewares/auth")
 
 
-router.post('/add-movie', verifyToken, upload.fields([{ name: 'image' }, { name: 'video' }]), movieAddHandler)
+router.post('/add-movie', verifyToken, adminOnly, upload.fields([{ name: 'image' }, { name: 'video' }]), movieAddHandler)
 router.get('/get-movie', verifyToken, getMovieHandler)
 router.get('/get-top-movie', verifyToken, getTopMovieHandler)
 router.get('/get-broadcast-movie', verifyToken, getBroadcastMovieHandler)

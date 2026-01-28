@@ -15,7 +15,7 @@ type movie = {
 };
 
 const Navbar = () => {
-  const admin = localStorage.getItem("adminEmail");
+  const admin = localStorage.getItem("isAdmin");
   const navigate = useNavigate();
   const [isSearch, setSearch] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);

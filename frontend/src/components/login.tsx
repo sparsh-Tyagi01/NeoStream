@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { log } from "console";
 
 const Login = () => {
   useEffect(() => {
@@ -22,8 +24,10 @@ const Login = () => {
         password: password
       });
       localStorage.setItem("token", res.data.token);
-      if (res.data.email == import.meta.env.VITE_API_ADMIN_EMAIL) {
-        localStorage.setItem("adminEmail", res.data.email);
+      if (res.data.role === "admin") {
+        console.log(res.data.role);
+        
+        localStorage.setItem("isAdmin", "true");
       }
       localStorage.setItem("username", res.data.username)
       if (res.status == 201 && res.data.token) {
@@ -32,7 +36,7 @@ const Login = () => {
       
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Something went wrong. Try again.");
+      toast.error("Login failed")
     } finally {
         setGenerate(false);
     }
@@ -40,6 +44,7 @@ const Login = () => {
 
   return (
     <>
+    <Toaster/>
       <div className="w-full h-screen relative overflow-hidden">
         <motion.img
           src="neo-poster.jpg"
@@ -83,7 +88,7 @@ const Login = () => {
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email or username"
+                  placeholder="Enter your email"
                   className="block text-white focus:outline-none border-1 border-gray-700 mt-2 w-[62vw] md:w-[22vw] h-[7vh] rounded-[5px] bg-gray-950/50 pl-3"
                 />
                 <input
