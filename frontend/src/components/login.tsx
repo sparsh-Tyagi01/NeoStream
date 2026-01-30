@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../lib/axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { log } from "console";
 
 const Login = () => {
   useEffect(() => {
