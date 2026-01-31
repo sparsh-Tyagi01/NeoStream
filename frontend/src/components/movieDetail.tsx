@@ -1,8 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import io from "socket.io-client";
 
 type Movie = {
   _id: string;
@@ -16,19 +17,63 @@ type Movie = {
 
 const MovieDetail = () => {
   const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
   if (!token) {
     return <Navigate to="/" replace />;
   }
 
   const { id } = useParams();
 
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const socket = useMemo(
+    () =>
+      io(import.meta.env.VITE_API_BASE_URL, {
+        transports: ["websocket", "polling"],
+      }),
+    [],
+  );
 
+  const [movie, setMovie] = useState<Movie | null>(null);
   const [data, setData] = useState<Movie[]>([]);
   const [topData, setTopData] = useState<Movie[]>([]);
   const [trendingData, setTrendingData] = useState<Movie[]>([]);
   const [newData, setNewData] = useState<Movie[]>([]);
   const [againData, setAgainData] = useState<Movie[]>([]);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<
+    { text: string; sender: "me" | "other"; user: string }[]
+  >([]);
+
+  useEffect(() => {
+    setMessages([]);
+
+    if (id) {
+      socket.emit("joinRoom", { room: id });
+    }
+
+    socket.on("joined", (msg) => {
+      console.log(msg);
+    });
+
+    socket.on("receiveMessage", (msg) => {
+      setMessages((prev) => [...prev, { text: msg.message, sender: msg.isMe ? "me" : "other", user: msg.username }]);
+    });
+
+    return () => {
+      socket.off("joined");
+      socket.off("receiveMessage");
+      if (id) {
+        socket.emit("leaveRoom", { room: id });
+      }
+    };
+  }, [id, socket]);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (message.trim()) {
+      socket.emit("sendMessage", { room: id, message, username });
+      setMessage("");
+    }
+  }
 
   useEffect(() => {
     async function getMovie() {
@@ -101,11 +146,31 @@ const MovieDetail = () => {
           </p>
           <p className="text-sm sm:text-md">Duration: {movie.duration}</p>
 
-          <img
-            src={movie.image}
-            alt={movie.name}
-            className="w-40 sm:w-60 md:w-72 lg:w-64 mt-4 rounded-lg mx-auto lg:mx-0"
-          />
+          <div className="relative">
+            <img
+              src={movie.image}
+              alt={movie.name}
+              className="w-40 sm:w-60 md:w-72 lg:w-64 mt-4 rounded-lg mx-auto lg:mx-0"
+            />
+            <div className="absolute top-0 bg-black/70 w-40 sm:w-60 md:w-72 lg:w-64 h-full overflow-y-auto hide-scrollbar space-y-2 pt-1">
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`text-base text-white px-4 rounded-xl max-w-[75%] break-words shadow-md 
+          ${msg.sender === "me" ? "bg-gradient-to-r from-emerald-800 to-cyan-700" : "bg-gray-700"}`}
+                  >
+                    <p className="block text-xs text-yellow-400">
+                      {msg.user}
+                    </p>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="w-full lg:w-2/3">
@@ -118,7 +183,25 @@ const MovieDetail = () => {
         </div>
       </div>
 
-      <div className="px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="w-full flex justify-center">
+        <form onSubmit={handleSubmit} className="fixed z-50">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="focus:outline-none w-[40vw] border-2 border-gray-200 rounded-xl py-1 pl-2 bg-black/50"
+          />
+          <button
+            type="submit"
+            className="text-white bg-red-700 rounded-xl py-1 px-2 ml-1 cursor-pointer"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+
+      <div className="px-2 sm:px-4 md:px-6 lg:px-8 mt-12">
         <div className="w-full bg-black">
           <h1
             id="all_movie"
