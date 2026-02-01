@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import io from "socket.io-client";
@@ -42,6 +42,7 @@ const MovieDetail = () => {
   const [messages, setMessages] = useState<
     { text: string; sender: "me" | "other"; user: string }[]
   >([]);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMessages([]);
@@ -129,6 +130,12 @@ const MovieDetail = () => {
     fetchMovie();
   }, [id]);
 
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   if (!movie) return <div className="text-white">Loading...</div>;
 
   return (
@@ -152,7 +159,7 @@ const MovieDetail = () => {
               alt={movie.name}
               className="w-40 sm:w-60 md:w-72 lg:w-64 mt-4 rounded-lg mx-auto lg:mx-0"
             />
-            <div className="absolute top-0 bg-black/70 w-40 sm:w-60 md:w-72 lg:w-64 h-full overflow-y-auto hide-scrollbar space-y-2 pt-1">
+            <div ref={messagesContainerRef} className="absolute top-0 bg-black/70 w-40 sm:w-60 md:w-72 lg:w-64 h-full overflow-y-auto hide-scrollbar space-y-2 pt-1">
               {messages.map((msg, i) => (
                 <div
                   key={i}
