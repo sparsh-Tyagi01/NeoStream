@@ -26,10 +26,18 @@ const movieSchema = new Schema({
   video: {
     type: String,
     required: true,
+  },
+  videoHls: {
+    type: String,
   }
 }, {
   timestamps: true
 });
+
+movieSchema.index({name: 1})
+movieSchema.index({director: 1})
+movieSchema.index({releasedDate: -1})
+movieSchema.index({createdAt: -1})
 
 const Movie = mongoose.model('Movie', movieSchema);
 module.exports = Movie;

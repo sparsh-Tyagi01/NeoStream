@@ -5,7 +5,10 @@ async function uploadImage(imagePath) {
         const result = await cloudinary.uploader.upload(imagePath,
             {
                 folder: "neostream",
-                resource_type: "image"
+                resource_type: "image",
+                transformation: [
+                    { quality: "auto", fetch_format: "auto" }
+                ]
             }
         )
         return result
@@ -19,7 +22,15 @@ async function uploadVideo(videoPath) {
         const result = await cloudinary.uploader.upload(videoPath,
             {
                 folder: "neostream",
-                resource_type: "video"
+                resource_type: "video",
+                eager: [
+                    {
+                        streaming_profile: "hd",
+                        format: "m3u8"
+                    }
+                ],
+                eager_async: true,
+                eager_notification_url: process.env.CLOUDINARY_WEBHOOK_URL
             }
         )
         return result

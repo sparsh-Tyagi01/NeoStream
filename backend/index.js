@@ -6,6 +6,11 @@ const movieRoute = require('./routes/movies');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
+const { connectRedis } = require("./utils/cache")
+const compression = require("compression")
+const { createAdapter } = require("@socket.io/redis-adapter")
+const { createClient } = require("redis")
+
 
 dotenv.config();
 
@@ -15,6 +20,7 @@ if (!process.env.MONGO_URI) {
 }
 
 connectMongoDb(process.env.MONGO_URI);
+connectRedis()
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +33,19 @@ const io = new Server(server, {
   }
 });
 
+if (process.env.REDIS_URL) {
+  const pubClient = createClient({ url: process.env.REDIS_URL });
+  const subClient = pubClient.duplicate();
+
+  Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+    io.adapter(createAdapter(pubClient, subClient));
+    console.log('Socket.io Redis adapter connected');
+  }).catch((err) => {
+    console.log('Socket.io Redis adapter failed:', err.message);
+  });
+}
+
+app.use(compression())
 app.use(cors({
   origin: process.env.BASE_URL || "*",
   methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
