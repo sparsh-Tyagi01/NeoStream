@@ -33,6 +33,16 @@ type movie = {
   duration: string;
   image: string;
   video: string;
+  videoHls?: string;
+};
+
+// Image optimization helper
+const optimizeImage = (url: string, width = 400) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace(
+    '/upload/',
+    `/upload/f_auto,q_auto,w_${width},c_limit/`
+  );
 };
 
 const AdminDashboard = () => {
@@ -111,8 +121,8 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-movie");
-      setData(res.data);
+      const res = await axiosInstance.get("/movies/get-movie?page=1&limit=100");
+      setData(res.data.movies || res.data);
     }
 
     getMovie();
@@ -124,8 +134,8 @@ const AdminDashboard = () => {
       if (res.status === 200) {
         alert("Movie deleted successfully");
 
-        const updatedMovies = await axiosInstance.get("/movies/get-movie");
-        setData(updatedMovies.data);
+        const updatedMovies = await axiosInstance.get("/movies/get-movie?page=1&limit=100");
+        setData(updatedMovies.data.movies || updatedMovies.data);
 
         const result = await axiosInstance.get("/movies/count-movie");
         setMovieCount(result.data);
@@ -352,8 +362,9 @@ const AdminDashboard = () => {
                   <TableRow key={movie._id}>
                     <TableCell className="font-medium flex items-center">
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 50)}
                         alt="img"
+                        loading="lazy"
                         className="w-[30px] mr-1 rounded-[2px]"
                       />
                       {movie.name}
