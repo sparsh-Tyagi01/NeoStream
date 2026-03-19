@@ -93,7 +93,8 @@ async function getTopMovieHandler(req, res) {
         releasedDate: 1,
         duration: 1,
         image: 1,
-        video: 1
+        video: 1,
+        videoHls: 1
       }
     }
   ])
@@ -118,7 +119,8 @@ async function getBroadcastMovieHandler(req, res) {
         releasedDate: 1,
         duration: 1,
         image: 1,
-        video: 1
+        video: 1,
+        videoHls: 1
       }
     }
   ])
@@ -163,8 +165,8 @@ async function deleteMovieHandler(req, res) {
 
 async function countMovieHandler(req,res) {
   const cached = await getCache('movie_count')
-  if(cached) return es.status(200).json(cached);
-    
+  if(cached) return res.status(200).json(cached);
+
   const movie = await Movie.countDocuments({})
 
   await setCache('movie_count', movie, 600)

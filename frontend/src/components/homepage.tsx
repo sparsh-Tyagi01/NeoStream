@@ -19,6 +19,16 @@ type movie = {
   duration: string;
   image: string;
   video: string;
+  videoHls?: string;
+};
+
+// Image optimization helper
+const optimizeImage = (url: string, width = 400) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace(
+    '/upload/',
+    `/upload/f_auto,q_auto,w_${width},c_limit/`
+  );
 };
 
 const Homepage = () => {
@@ -36,8 +46,8 @@ const Homepage = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-movie");
-      setData(res.data);
+      const res = await axiosInstance.get("/movies/get-movie?page=1&limit=20");
+      setData(res.data.movies || res.data);
     }
 
     getMovie();
@@ -147,8 +157,9 @@ const Homepage = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -190,8 +201,9 @@ const Homepage = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -233,8 +245,9 @@ const Homepage = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -276,8 +289,9 @@ const Homepage = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -319,8 +333,9 @@ const Homepage = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>

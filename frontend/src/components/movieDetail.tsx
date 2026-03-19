@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import io from "socket.io-client";
+import Hls from "hls.js"
 
 type Movie = {
   _id: string;
@@ -13,6 +14,15 @@ type Movie = {
   duration: string;
   image: string;
   video: string;
+  videoHls?: string;
+};
+
+const optimizeImage = (url: string, width = 400) => {
+  if (!url || !url.includes('cloudinary')) return url;
+  return url.replace(
+    '/upload/',
+    `/upload/f_auto,q_auto,w_${width},c_limit/`
+  );
 };
 
 const MovieDetail = () => {
@@ -23,6 +33,8 @@ const MovieDetail = () => {
   }
 
   const { id } = useParams();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
 
   const socket = useMemo(
     () =>
@@ -43,6 +55,54 @@ const MovieDetail = () => {
     { text: string; sender: "me" | "other"; user: string }[]
   >([]);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!movie || !videoRef.current) return;
+
+    const video = videoRef.current;
+    const videoUrl = movie.videoHls || movie.video;
+
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoUrl;
+    } 
+    else if (Hls.isSupported()) {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+
+      const hls = new Hls({
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        lowLatencyMode: false,
+      });
+
+      hls.loadSource(videoUrl);
+      hls.attachMedia(video);
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log('HLS manifest loaded, quality levels:', hls.levels.length);
+      });
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          console.error('Fatal HLS error, falling back to MP4:', data);
+          video.src = movie.video;
+        }
+      });
+
+      hlsRef.current = hls;
+    } 
+    else {
+      video.src = movie.video;
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [movie]);
 
   useEffect(() => {
     setMessages([]);
@@ -78,8 +138,8 @@ const MovieDetail = () => {
 
   useEffect(() => {
     async function getMovie() {
-      const res = await axiosInstance.get("/movies/get-movie");
-      setData(res.data);
+      const res = await axiosInstance.get("/movies/get-movie?page=1&limit=20");
+      setData(res.data.movies || res.data);
     }
 
     getMovie();
@@ -155,8 +215,9 @@ const MovieDetail = () => {
 
           <div className="relative">
             <img
-              src={movie.image}
+              src={optimizeImage(movie.image, 300)}
               alt={movie.name}
+              loading="lazy"
               className="w-40 sm:w-60 md:w-72 lg:w-64 mt-4 rounded-lg mx-auto lg:mx-0"
             />
             <div ref={messagesContainerRef} className="absolute top-0 bg-black/70 w-40 sm:w-60 md:w-72 lg:w-64 h-full overflow-y-auto hide-scrollbar space-y-2 pt-1">
@@ -182,7 +243,7 @@ const MovieDetail = () => {
 
         <div className="w-full lg:w-2/3">
           <video
-            src={movie.video}
+            ref={videoRef}
             autoPlay
             controls
             className="w-full h-auto max-w-[800px] mx-auto rounded-lg shadow-md shadow-emerald-500"
@@ -226,8 +287,9 @@ const MovieDetail = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -269,8 +331,9 @@ const MovieDetail = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -312,8 +375,9 @@ const MovieDetail = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -355,8 +419,9 @@ const MovieDetail = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -398,8 +463,9 @@ const MovieDetail = () => {
                   <div className="overflow-hidden rounded-md group relative">
                     <Link to={`/movies/${movie._id}`}>
                       <img
-                        src={movie.image}
+                        src={optimizeImage(movie.image, 200)}
                         alt="img"
+                        loading="lazy"
                         className="aspect-[2/3] w-full h-auto object-cover hover:scale-105 md:hover:scale-110 transition-all duration-300 cursor-pointer"
                       />
                     </Link>
@@ -426,4 +492,4 @@ const MovieDetail = () => {
   );
 };
 
-export default MovieDetail;
+export default MovieDetail
