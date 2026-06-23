@@ -16,7 +16,7 @@ function verifyToken(req,res,next) {
     }
 }
 
-function adminOnly(req,res) {
+function adminOnly(req,res,next) {
     if(!req.user || req.user.role != "admin"){
         return res.status(400).json({message: "Admin access required"})
     }
