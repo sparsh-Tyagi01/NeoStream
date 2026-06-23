@@ -15,13 +15,19 @@ async function otpGenerateHandler(req, res) {
     const otpExpires = new Date(Date.now() + 300 * 1000);
 
     const existingUsername = await User.findOne({ username })
-    if(existingUsername) {
-      return res.status(404).json({"message": "username already registered"})
+    if (existingUsername) {
+      if (existingUsername.password) {
+        return res.status(404).json({"message": "username already registered"})
+      }
+      await User.deleteOne({ _id: existingUsername._id })
     }
 
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      return res.status(404).json({"message": "email already registered"})
+      if (existingEmail.password) {
+        return res.status(404).json({"message": "email already registered"})
+      }
+      await User.deleteOne({ _id: existingEmail._id })
     }
     
     await User.create({
@@ -31,14 +37,38 @@ async function otpGenerateHandler(req, res) {
       otpExpires
     })
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP is ${otp}, it will expire in 5 minutes`,
-    });
+    // Only for demo purpose
+    // Race the email send against a 3-second timeout.
+    // Render's free tier blocks outbound SMTP (port 465/587), so
+    // Nodemailer will hang or error. If that happens we return the
+    // OTP directly so the frontend can show it in the UI.
+    let emailSent = false;
+    try {
+      await Promise.race([
+        transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: email,
+          subject: 'Your OTP Code',
+          text: `Your OTP is ${otp}, it will expire in 5 minutes`,
+        }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Email timeout')), 10000)
+        ),
+      ]);
+      emailSent = true;
+    } catch (mailErr) {
+      console.warn('Email delivery failed, returning OTP in response:', mailErr.message);
+    }
 
-    res.json({ message: 'OTP sent' });
+    if (emailSent) {
+      res.json({ message: 'OTP sent to your email' });
+    } else {
+      res.json({
+        message: 'OTP generated successfully',
+        emailFailed: true,
+        otp,
+      });
+    }
   } catch (error) {
     console.error('OTP Generate Error:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
